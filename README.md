@@ -9,22 +9,27 @@ the main Clanker Guard tree.
 Linux / macOS:
 
 ```bash
-curl -fsSL https://github.com/derekzacharias/clanker-guard-agent/releases/download/v0.1.0/install-agent.sh \
-  | bash -s -- --version 0.1.0
+curl -fsSL https://github.com/derekzacharias/clanker-guard-agent/releases/download/v0.1.1/install-agent.sh \
+  | bash -s -- --version 0.1.1 --server http://<dashboard>:8787 --enroll-token <token>
 ```
 
 Windows (PowerShell):
 
 ```powershell
-iwr https://github.com/derekzacharias/clanker-guard-agent/releases/download/v0.1.0/install-agent.ps1 `
+iwr https://github.com/derekzacharias/clanker-guard-agent/releases/download/v0.1.1/install-agent.ps1 `
   -OutFile "$env:TEMP\install-agent.ps1" -UseBasicParsing
-& "$env:TEMP\install-agent.ps1" -Version 0.1.0
+& "$env:TEMP\install-agent.ps1" -Version 0.1.1 -Server "http://<dashboard>:8787" -EnrollToken "<token>"
 ```
 
 Each installer downloads the platform build from the tagged release, checks it
 against the published SHA-256 (or `SHA256SUMS`), and only then installs it.
-Nothing is installed as a service or scheduled task, and the agent has no
-check-in channel.
+Nothing is installed as a service or scheduled task.
+
+Pass `--server` and `--enroll-token` (the dashboard shows the full command under
+Settings → Agents) and the endpoint enrolls, runs one assessment, and reports the
+findings plus its progress to that server only. The server cannot send it
+commands, and nothing is sent to a third party. Without those flags the agent is
+purely local.
 
 Uninstall:
 
@@ -44,6 +49,6 @@ clanker-guard-agent uninstall --yes
 Build and publish from the main tree:
 
 ```bash
-./scripts/build-agent-release.sh 0.1.0
-gh release create v0.1.0 dist/v0.1.0/* --repo derekzacharias/clanker-guard-agent
+./scripts/build-agent-release.sh 0.1.1
+gh release create v0.1.1 dist/v0.1.1/* --repo derekzacharias/clanker-guard-agent
 ```
